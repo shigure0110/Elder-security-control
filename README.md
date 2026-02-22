@@ -21,3 +21,13 @@
 
 生成路径通常为：
 `app/build/outputs/apk/release/app-release.apk`
+
+
+## Release 出包（按你的要求）
+仓库已新增 `release/` 目录和发布脚本 `scripts/publish_release_apk.sh`，用于把 `app-release.apk` 放到 `release/elder-security-release.apk` 并生成校验元数据。
+
+```bash
+./scripts/publish_release_apk.sh
+```
+
+> 说明：当前仓库快照仍缺失完整 Android 构建工程文件，所以在这里无法直接“编译”出 APK；但一旦你提供完整工程或在你现有工程中构建出 APK，我这套脚本可立即把包放到 release 目录。
