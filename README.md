@@ -17,10 +17,10 @@
 - CI：`.github/workflows/android-apk.yml`
 
 ## 云端自动打包 APK（GitHub Actions）
-每次 push/PR 会自动执行：
+每次 push 到 `main` / PR 会自动执行：
 
 ```bash
-./gradlew assembleDebug
+gradle assembleDebug
 ```
 
 并上传 APK artifact：
@@ -34,13 +34,11 @@
 4. 解压后即可获得 `app-debug.apk` 安装包
 
 
-### CI 兼容说明（防止 `gradlew` 缺失报错）
-工作流已兼容两种构建方式：
-- 优先使用 `./gradlew assembleDebug`（仓库包含 wrapper 时）
-- 若 `gradlew` 不存在，自动回退到 `gradle assembleDebug`
+### CI 兼容说明（防止 wrapper 缺失报错）
+工作流固定使用 `gradle/actions/setup-gradle` 安装 Gradle，并执行 `gradle assembleDebug`。
 
-这样即使 `main` 分支暂时缺少 wrapper 文件，Actions 也不会在 `chmod +x gradlew` 处直接失败。
+这样即使仓库不跟踪 `gradle-wrapper.jar`，也不会因为 wrapper 缺失而导致 CI 失败。
 
 
 ### 二进制限制说明
-为避免“拉取失败/不支持二进制文件”，仓库不再跟踪 `gradle/wrapper/gradle-wrapper.jar`。CI 会优先使用 `./gradlew`（若存在可用 wrapper），否则回退到 `gradle assembleDebug`。
+为避免“拉取失败/不支持二进制文件”，仓库不再跟踪 `gradle/wrapper/gradle-wrapper.jar`。CI 直接使用 `gradle assembleDebug`（由 `gradle/actions/setup-gradle` 提供 Gradle），不再依赖仓库内 wrapper 二进制。
