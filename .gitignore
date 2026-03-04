@@ -1,0 +1,8 @@
+# Build/release artifacts
+release/*.apk
+app/build/
+.gradle/
+local.properties
+
+# Binary wrapper jar (avoid binary file restrictions in some git hosts)
+gradle/wrapper/gradle-wrapper.jar
