@@ -9,6 +9,8 @@
 ## 新增体验能力
 - 新增老人友好首页 UI（大字号、强对比、大按钮，接近 iOS 简洁风格）。
 - 新增应用内更新管理器（检查版本后下载 APK，并触发安装）。
+- 新增风控设置页雏形：可配置平台管控开关、小额账单阈值/汇报时间、目标微信群。
+- 新增功能落地规划文档：`docs/IMPLEMENTATION_PLAN.md`。
 
 ## 打包 APK 说明
 当前仓库尚未包含完整 Android Gradle 工程（缺少 `gradlew` / `build.gradle` / `settings.gradle`），因此无法在本仓库直接产出可安装 APK。
