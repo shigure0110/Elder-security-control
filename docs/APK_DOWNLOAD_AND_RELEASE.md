@@ -6,8 +6,12 @@
 2. 点进一次 `Android APK CI` 运行记录。
 3. 在页面右侧/下方查看 **Artifacts** 区域。
 
-### 结果 A：能看到 `app-debug-apk`
-说明本次构建成功产出了 APK，可直接下载 zip，解压后得到 `app-debug.apk`。
+### 结果 A：能看到 Artifact
+说明本次构建成功产出了 APK。你会看到：
+- `app-debug-apk`：解压后得到 `app-debug.apk`（可直接安装）。
+- `app-release-unsigned-apk`：解压后得到 `app-release-unsigned.apk`（发布前需签名）。
+
+> 注意：Artifact 下载下来是 zip，不是直接可安装包，必须先解压。
 
 ### 结果 B：Artifacts 是空的
 这表示本次构建未产出 APK。常见原因：
@@ -42,7 +46,13 @@ gradle assembleRelease
 
 ---
 
+## 手机提示“安装包无效/不兼容”排查
+- 先确认你安装的是 **解压后的 `.apk`**，不是 Artifact zip。
+- 查看手机系统版本是否 >= Android 5.0（项目 `minSdk=21`）。
+- 若手机已安装同包名旧版本，先卸载后再装。
+- 优先安装 `app-debug.apk`（已可安装）；`app-release-unsigned.apk` 需要签名后才可正式分发安装。
+
 ## 下载不到 APK 时的排查顺序
-- 先看 `Build debug APK` 是否执行并成功。
-- 再看 `Upload debug APK artifact` 是否执行并成功。
-- 如果上传步骤失败，检查 `app/build/outputs/apk/debug/app-debug.apk` 是否存在。
+- 先看 `Build debug APK` 与 `Build release APK (unsigned)` 是否执行并成功。
+- 再看两个 Upload 步骤是否执行并成功。
+- 若上传失败，检查对应输出文件是否存在。

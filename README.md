@@ -14,20 +14,25 @@
 - 新增可行性与启动任务文档：`docs/FEASIBILITY_AND_STARTUP_TASKS.md`（覆盖微信群日报、安装/加好友家庭审批边界与实现路线）。
 
 ## 打包 APK 说明
-当前仓库已提供 Android Gradle 构建脚本，CI 使用 `gradle assembleDebug` 产出调试包。
+当前仓库已提供 Android Gradle 构建脚本，CI 会同时产出 `debug` 与 `release-unsigned` 两种 APK。
 
 本地可执行：
 
 ```bash
-gradle assembleRelease
+gradle assembleDebug assembleRelease
 ```
 
 生成路径通常为：
-`app/build/outputs/apk/release/app-release.apk`
+`app/build/outputs/apk/release/app-release-unsigned.apk`
+
+兼容性说明：当前 `minSdk=21`（Android 5.0+）。
 
 
 ## 在哪里下载 APK / 如何发布
-- 在 GitHub Actions 的某次 `Android APK CI` 运行页面，下载 `Artifacts` 里的 `app-debug-apk`。
+- 在 GitHub Actions 的某次 `Android APK CI` 运行页面，下载 `Artifacts`：
+  - `app-debug-apk`（可直接安装，包名后缀 `.debug`）
+  - `app-release-unsigned-apk`（发布前需签名）
+- 注意下载的是 zip 工件，先解压再安装 `.apk`。
 - 如果 `Artifacts` 为空，通常表示本次构建失败；请先查看日志定位失败步骤。
 - 完整步骤见：`docs/APK_DOWNLOAD_AND_RELEASE.md`。
 

@@ -24,3 +24,6 @@
 - 路径：仓库 -> **Actions** -> 某次 `Android APK CI` -> **Artifacts**。
 - `Build debug APK` 与上传步骤成功时，会出现 `app-debug-apk`。
 - 若 Artifacts 为空，请在 Actions 日志中检查构建或上传失败原因。
+
+
+> 提示：CI 上传的 release 工件默认是 `app-release-unsigned.apk`，发布到手机前请先签名。
