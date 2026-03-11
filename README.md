@@ -30,8 +30,8 @@ gradle assembleDebug assembleRelease
 
 ## 在哪里下载 APK / 如何发布
 - 在 GitHub Actions 的某次 `Android APK CI` 运行页面，下载 `Artifacts`：
-  - `app-debug-apk`（可直接安装，包名后缀 `.debug`）
-  - `app-release-unsigned-apk`（发布前需签名）
+  - `app-debug-apk`（**优先安装这个**，可直接安装，包名后缀 `.debug`）
+  - `app-release-unsigned-apk`（发布前需签名，不建议普通用户直接安装）
 - 注意下载的是 zip 工件，先解压再安装 `.apk`。
 - 如果 `Artifacts` 为空，通常表示本次构建失败；请先查看日志定位失败步骤。
 - 完整步骤见：`docs/APK_DOWNLOAD_AND_RELEASE.md`。

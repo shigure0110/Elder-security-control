@@ -46,6 +46,12 @@ gradle assembleRelease
 
 ---
 
+## 两个 Artifact 到底该装哪个（结论）
+- **日常直接安装测试：装 `app-debug-apk`**（解压后 `app-debug.apk`）。
+- `app-release-unsigned-apk`（解压后 `app-release-unsigned.apk`）**默认不能直接作为正式安装包分发**，因为它是未签名 release 包，需先签名。
+
+一句话：你现在要在手机上马上安装验证，就选 **`app-debug-apk`**。
+
 ## 手机提示“安装包无效/不兼容”排查
 - 先确认你安装的是 **解压后的 `.apk`**，不是 Artifact zip。
 - 查看手机系统版本是否 >= Android 5.0（项目 `minSdk=21`）。
