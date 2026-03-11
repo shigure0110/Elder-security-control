@@ -37,6 +37,7 @@ private data class PlatformControlState(
  * 1) 平台开关（支付宝/微信/抖音/拼多多/淘宝）
  * 2) 小额账单汇总规则
  * 3) 微信群发布目标配置
+ * 4) 家庭同意策略（安装应用、微信加好友）
  */
 @Composable
 fun ControlSettingsScreen(
@@ -57,6 +58,10 @@ fun ControlSettingsScreen(
     val reportTime = remember { mutableStateOf("20:30") }
     val wechatGroupName = remember { mutableStateOf("家庭守护群") }
     val wechatGroupId = remember { mutableStateOf("") }
+
+    val appInstallApprovalRequired = remember { mutableStateOf(true) }
+    val wechatFriendApprovalRequired = remember { mutableStateOf(true) }
+    val approvalFallbackMode = remember { mutableStateOf("检测后覆盖拦截") }
 
     Column(
         modifier = Modifier
@@ -144,6 +149,42 @@ fun ControlSettingsScreen(
             }
         }
 
+        Card {
+            Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                Text("家庭同意策略", fontSize = 22.sp, fontWeight = FontWeight.SemiBold)
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text("新安装软件需家庭同意", fontSize = 20.sp)
+                    Switch(
+                        checked = appInstallApprovalRequired.value,
+                        onCheckedChange = { appInstallApprovalRequired.value = it }
+                    )
+                }
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text("微信加好友需家庭同意", fontSize = 20.sp)
+                    Switch(
+                        checked = wechatFriendApprovalRequired.value,
+                        onCheckedChange = { wechatFriendApprovalRequired.value = it }
+                    )
+                }
+                OutlinedTextField(
+                    value = approvalFallbackMode.value,
+                    onValueChange = { approvalFallbackMode.value = it },
+                    modifier = Modifier.fillMaxWidth(),
+                    singleLine = true,
+                    label = { Text("阻断模式（如：检测后覆盖拦截 / 仅提醒）") }
+                )
+                Text("说明：普通设备通常无法 100% 底层阻止安装，建议启用检测+审批+覆盖拦截方案。", fontSize = 14.sp)
+            }
+        }
+
         Spacer(modifier = Modifier.height(6.dp))
         Button(
             onClick = {
@@ -154,7 +195,10 @@ fun ControlSettingsScreen(
                         smallBillThresholdYuan = smallBillThreshold.value.toIntOrNull() ?: 200,
                         reportTime = reportTime.value,
                         wechatGroupName = wechatGroupName.value,
-                        wechatGroupId = wechatGroupId.value.ifBlank { null }
+                        wechatGroupId = wechatGroupId.value.ifBlank { null },
+                        appInstallApprovalRequired = appInstallApprovalRequired.value,
+                        wechatFriendApprovalRequired = wechatFriendApprovalRequired.value,
+                        approvalFallbackMode = approvalFallbackMode.value
                     )
                 )
             },
@@ -171,5 +215,8 @@ data class SettingsSnapshot(
     val smallBillThresholdYuan: Int,
     val reportTime: String,
     val wechatGroupName: String,
-    val wechatGroupId: String?
+    val wechatGroupId: String?,
+    val appInstallApprovalRequired: Boolean,
+    val wechatFriendApprovalRequired: Boolean,
+    val approvalFallbackMode: String
 )
