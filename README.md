@@ -14,17 +14,27 @@
 - 新增可行性与启动任务文档：`docs/FEASIBILITY_AND_STARTUP_TASKS.md`（覆盖微信群日报、安装/加好友家庭审批边界与实现路线）。
 
 ## 打包 APK 说明
-当前仓库尚未包含完整 Android Gradle 工程（缺少 `gradlew` / `build.gradle` / `settings.gradle`），因此无法在本仓库直接产出可安装 APK。
+当前仓库已提供 Android Gradle 构建脚本，CI 会同时产出 `debug` 与 `release-unsigned` 两种 APK。
 
-如需我帮你直接打包 APK，请补充完整 Android 工程文件后可执行：
+本地可执行：
 
 ```bash
-./gradlew assembleRelease
+gradle assembleDebug assembleRelease
 ```
 
 生成路径通常为：
-`app/build/outputs/apk/release/app-release.apk`
+`app/build/outputs/apk/release/app-release-unsigned.apk`
 
+兼容性说明：当前 `minSdk=21`（Android 5.0+）。
+
+
+## 在哪里下载 APK / 如何发布
+- 在 GitHub Actions 的某次 `Android APK CI` 运行页面，下载 `Artifacts`：
+  - `app-debug-apk`（**优先安装这个**，可直接安装，包名后缀 `.debug`）
+  - `app-release-unsigned-apk`（发布前需签名，不建议普通用户直接安装）
+- 注意下载的是 zip 工件，先解压再安装 `.apk`。
+- 如果 `Artifacts` 为空，通常表示本次构建失败；请先查看日志定位失败步骤。
+- 完整步骤见：`docs/APK_DOWNLOAD_AND_RELEASE.md`。
 
 ## Release 出包（按你的要求）
 仓库已新增 `release/` 目录和发布脚本 `scripts/publish_release_apk.sh`，用于把 `app-release.apk` 放到 `release/elder-security-release.apk` 并生成校验元数据。
@@ -33,4 +43,4 @@
 ./scripts/publish_release_apk.sh
 ```
 
-> 说明：当前仓库快照仍缺失完整 Android 构建工程文件，所以在这里无法直接“编译”出 APK；但一旦你提供完整工程或在你现有工程中构建出 APK，我这套脚本可立即把包放到 release 目录。
+> 说明：CI 默认产出 debug APK（`app-debug-apk` artifact）；发布包建议使用 `gradle assembleRelease` 后再执行发布脚本。
