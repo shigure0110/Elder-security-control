@@ -31,7 +31,8 @@ fun ElderHomeScreen(
     todayRiskCount: Int,
     onPayClicked: () -> Unit,
     onCallFamilyClicked: () -> Unit,
-    onCheckUpdateClicked: () -> Unit
+    onCheckUpdateClicked: () -> Unit,
+    onSettingsClicked: () -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -54,7 +55,7 @@ fun ElderHomeScreen(
 
         RiskNoticeCard()
         ActionButtons(onPayClicked, onCallFamilyClicked)
-        UpdateCard(onCheckUpdateClicked)
+        UpdateCard(onCheckUpdateClicked, onSettingsClicked)
     }
 }
 
@@ -107,7 +108,10 @@ private fun ActionButtons(
 }
 
 @Composable
-private fun UpdateCard(onCheckUpdateClicked: () -> Unit) {
+private fun UpdateCard(
+    onCheckUpdateClicked: () -> Unit,
+    onSettingsClicked: () -> Unit
+) {
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(24.dp),
@@ -123,8 +127,13 @@ private fun UpdateCard(onCheckUpdateClicked: () -> Unit) {
             Spacer(modifier = Modifier.height(6.dp))
             Text("建议连接 Wi-Fi 后更新到最新版本。", fontSize = 20.sp, color = Color(0xFF1F2937))
             Spacer(modifier = Modifier.height(12.dp))
-            Button(onClick = onCheckUpdateClicked, shape = RoundedCornerShape(18.dp)) {
-                Text("检查并下载更新", fontSize = 22.sp)
+            Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                Button(onClick = onCheckUpdateClicked, shape = RoundedCornerShape(18.dp), modifier = Modifier.weight(1f)) {
+                    Text("检查更新", fontSize = 20.sp)
+                }
+                Button(onClick = onSettingsClicked, shape = RoundedCornerShape(18.dp), modifier = Modifier.weight(1f)) {
+                    Text("风控设置", fontSize = 20.sp)
+                }
             }
         }
     }

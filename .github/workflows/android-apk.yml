@@ -23,13 +23,31 @@ jobs:
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
 
+      - name: Detect Gradle wrapper
+        id: detect_wrapper
+        run: |
+          if [ -f "gradlew" ]; then
+            echo "has_wrapper=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "has_wrapper=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Report missing Gradle wrapper
+        if: steps.detect_wrapper.outputs.has_wrapper != 'true'
+        run: |
+          echo "::warning::gradlew not found in repository root."
+          echo "::warning::Skipping APK build. Please commit the Gradle wrapper and Android build files (gradlew, gradle/wrapper, settings.gradle, build.gradle)."
+
       - name: Grant execute permission for gradlew
+        if: steps.detect_wrapper.outputs.has_wrapper == 'true'
         run: chmod +x gradlew
 
       - name: Build debug APK
+        if: steps.detect_wrapper.outputs.has_wrapper == 'true'
         run: ./gradlew assembleDebug
 
       - name: Upload debug APK artifact
+        if: steps.detect_wrapper.outputs.has_wrapper == 'true'
         uses: actions/upload-artifact@v4
         with:
           name: app-debug-apk
